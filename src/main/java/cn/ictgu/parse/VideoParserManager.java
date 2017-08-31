@@ -1,12 +1,10 @@
 package cn.ictgu.parse;
 
-import cn.ictgu.exception.ParserNotFoundException;
+import cn.ictgu.constant.ExceptionEnum;
+import cn.ictgu.exception.AnyException;
 import cn.ictgu.parse.article.Jianshu;
 import cn.ictgu.parse.article.Weixin;
-import cn.ictgu.parse.video.Iqiyi;
-import cn.ictgu.parse.video.Letv;
-import cn.ictgu.parse.video.Panda;
-import cn.ictgu.parse.video.Youku;
+import cn.ictgu.parse.video.*;
 import cn.ictgu.tools.UrlUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -27,10 +25,12 @@ public class VideoParserManager implements ParserManager {
         parserMap = new HashMap<>();
         parserMap.put("le.com", new Letv());
         parserMap.put("panda.tv", new Panda());
-        parserMap.put("qq.com", new Weixin());
+        parserMap.put("weixin.qq.com", new Weixin());
         parserMap.put("jianshu.com", new Jianshu());
         parserMap.put("youku.com", new Youku());
         parserMap.put("iqiyi.com", new Iqiyi());
+        parserMap.put("v.qq.com", new Tencent());
+        parserMap.put("v.youku.com", new Youku());
     }
 
     /**
@@ -41,7 +41,7 @@ public class VideoParserManager implements ParserManager {
         log.info("Parser key: " + key);
         Parser parser = this.getParser(key);
         if (parser == null) {
-            throw new ParserNotFoundException();
+            throw new AnyException(ExceptionEnum.NO_PARSER);
         }
         return parser.parse(url);
     }
