@@ -6,6 +6,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="referrer" content="never">
 
     <link rel="stylesheet" th:href="${source.css}">
 
@@ -42,11 +43,18 @@
                     </h3>
                 </div>
 
+                <p></p>
+
+                <div class="ui mini teal labels">
+                    <i class="tag icon"></i> 标签：
+                    <a class="ui label" th:each="tag : ${source.tags}" th:text="${tag.name}"></a>
+                </div>
+
                 <div class="hidden" id="articleImage" th:data-value="${source.image}"></div>
 
                 <div class="hidden" id="articleUrl" th:data-value="${source.value}"></div>
 
-                <div class="ui margin-top" id="content">
+                <div class="ui segment margin-top" id="content">
 
                 </div>
 

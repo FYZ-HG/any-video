@@ -22,10 +22,12 @@ import java.util.regex.Pattern;
 
 @Log4j2
 public class Tencent implements Parser<Video> {
-    private final static String VIDEO_API = "http://vv.video.qq.com/getinfo";
-    private final static String KEY_API = "http://vv.video.qq.com/getkey";
-    private final static String COOKIE = "pgv_pvi=9348187136; RK=CHGK8Lmqbf; tvfe_boss_uuid=c85c752b5873df15; luin=o0545544032; lskey=00010000f361e190a6b7ef8be0b7a9164521ee812ab4e4f7ead3bb2b349d052506de9e9c88780f0030ae6a6e; main_login=qq; login_time_init=2017-8-1 23:14:27; ptui_loginuin=545544032; mobileUV=1_15db7e2ce1a_9e2f3; login_time_last=2017-8-6 22:37:14; pgv_si=s6543401984; _qpsvr_localtk=0.20678077268566541; ptisp=cnc; ptcz=b062b006ce39963456220087e5601343eed03f8ca077b082b3501170da06c53c; pt2gguin=o0545544032; uin=o0545544032; skey=@UExBxyw2a; uid=100414728; pgv_info=ssid=s9067698750; pgv_pvid=4489122330; o_cookie=545544032";
-    private final static String GUID = "19a2e3090861a0e3e107fa4e8f4c9373";
+    private final static String VIDEO_API = "http://h5vv.video.qq.com/getinfo";
+    private final static String KEY_API = "http://h5vv.video.qq.com/getkey";
+    private final static String COOKIE = "";
+    private final static String GUID = "";
+    private final static String SDTFROM = "v1010";
+    private final static String PLATFORM = "10901";
 
     @Override
     public Video parse(String url) {
@@ -99,9 +101,11 @@ public class Tencent implements Parser<Video> {
     private String videoInfo(String vid) {
         try {
             Document document = Jsoup.connect(VIDEO_API).header("Cookie", COOKIE)
-                    .data("vids", vid).data("platform", "10901")
+                    .data("vids", vid).data("platform", PLATFORM)
+                    .data("sdtfrom", SDTFROM)
+                    .data("format", "10209")
                     .data("otype", "json").data("defn", "fhd")
-                    .data("defaultfmt", "auto").data("guid", GUID).ignoreContentType(true).get();
+                    .data("defaultfmt", "fhd").data("guid", GUID).ignoreContentType(true).get();
             String result = document.text().replace("QZOutputJson=", "");
             return result.substring(0, result.length() - 1);
         } catch (IOException e) {
@@ -134,7 +138,7 @@ public class Tencent implements Parser<Video> {
      * 片段播放地址
      */
     private String playUrl(String url, String part, String vkey) {
-        return url + part + "?sdtfrom=v1010&guid=" + GUID + "&vkey=" + vkey;
+        return url + part + "?sdtfrom=" + "v1010" + "&guid=" + GUID + "&vkey=" + vkey;
     }
 
     /**
@@ -143,11 +147,12 @@ public class Tencent implements Parser<Video> {
     private String videoKey(String vid, String filename, String format) {
         try {
             Document document = Jsoup.connect(KEY_API).header("Cookie", COOKIE)
-                    .data("vid", vid).data("platform", "10901")
-                    .data("otype", "json").data("vt", "203")
-                    .data("filename", filename).data("sdtfrom", "v1010")
+                    .data("vid", vid).data("platform", PLATFORM)
+                    .data("otype", "json")
+                    .data("filename", filename).data("sdtfrom", SDTFROM)
                     .data("format", format).data("guid", GUID).ignoreContentType(true).get();
             String result = document.text().replace("QZOutputJson=", "");
+            System.out.println(result);
             result = result.substring(0, result.length() - 1);
             return JSONObject.parseObject(result).getString("key");
         } catch (IOException e) {

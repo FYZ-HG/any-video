@@ -2,9 +2,9 @@ package cn.ictgu.config;
 
 import cn.ictgu.filter.GithubAuthenticationFilter;
 import cn.ictgu.filter.QQAuthenticationFilter;
-import cn.ictgu.filter.qq.GithubAuthenticationManager;
-import cn.ictgu.filter.qq.QQAuthenticationManager;
-import cn.ictgu.serv.service.UserService;
+import cn.ictgu.filter.manager.GithubAuthenticationManager;
+import cn.ictgu.filter.manager.QQAuthenticationManager;
+import cn.ictgu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
